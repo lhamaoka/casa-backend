@@ -211,7 +211,7 @@ spec:
 
     stage("11.- Nexus"){
         steps{
-            sh "echo Si se ha llegado a esta etapa sin problemas, se deberá depositar el artefacto generado en Nexus."
+            sh "echo Si se ha llegado a esta etapa sin problemas, se deberá depositar el artefacto generado en Nexus"
         }
     }
 
