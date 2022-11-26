@@ -136,7 +136,7 @@ spec:
                 sh 'rm -r launcher'
               }
             }
-            sh "git clone https://github.com/lhamaoka/manifest_launcher.git launcher"
+            sh "git clone https://github.com/lhamaoka/casa-launcher.git launcher"
             sh "kubectl apply -f launcher/deploys/backend/manifest.yaml --kubeconfig=launcher/config/config"
         }
     }
