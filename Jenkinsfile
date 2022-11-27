@@ -49,23 +49,23 @@ spec:
         // when {
         //     branch 'main'
         // }
-        steps {
-            script {
-                // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
-                pom = readMavenPom file: "pom.xml"
+        // steps {
+        //     script {
+        //         // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
+        //         pom = readMavenPom file: "pom.xml"
                 
-                echo "${version}"
-                sh "mvn versions:set -DremoveSnapshot=true"
-                // def versionsinsnapshot = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-                // echo "${versionsinsnapshot}"
-                sh "git checkout main"
-                sh "git add pom.xml"
-                sh "git config --global user.email \"lhamaoka@devcenter.es\""
-                sh "git config --global user.name \"lhamaoka\""
-                sh "git commit -m \"pom.xml update \""
-                sh "git push git@github.com:lhamaoka/casa-backend.git"
-            }
-        }
+        //         echo "${version}"
+        //         sh "mvn versions:set -DremoveSnapshot=true"
+        //         // def versionsinsnapshot = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+        //         // echo "${versionsinsnapshot}"
+        //         sh "git checkout main"
+        //         sh "git add pom.xml"
+        //         sh "git config --global user.email \"lhamaoka@devcenter.es\""
+        //         sh "git config --global user.name \"lhamaoka\""
+        //         sh "git commit -m \"pom.xml update \""
+        //         sh "git push git@github.com:lhamaoka/casa-backend.git"
+        //     }
+        // }
     }
 
     // stage("2.- Compile"){
