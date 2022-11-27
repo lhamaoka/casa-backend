@@ -51,7 +51,7 @@ spec:
         // }
         steps {
             script {
-                // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
+                // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
                 pom = readMavenPom file: "pom.xml"
                 
                 echo "${version}"
