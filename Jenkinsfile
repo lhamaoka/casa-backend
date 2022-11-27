@@ -58,6 +58,7 @@ spec:
                 sh "mvn versions:set -DremoveSnapshot=true"
                 // def versionsinsnapshot = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
                 // echo "${versionsinsnapshot}"
+                sh "git checkout main"
                 sh "git add pom.xml"
                 sh "git config --global user.email \"lhamaoka@devcenter.es\""
                 sh "git config --global user.name \"lhamaoka\""
