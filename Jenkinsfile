@@ -62,7 +62,7 @@ spec:
                 sh "git config --global user.email \"lhamaoka@devcenter.es\""
                 sh "git config --global user.name \"lhamaoka\""
                 sh "git commit -m \"pom.xml update \""
-                sh "git push https://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@github.com/lhamaoka/practica_final_backend.git main"
+                sh "git push https://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@github.com/lhamaoka/casa-backend.git"
             }
         }
     }
