@@ -49,7 +49,7 @@ spec:
         }
     }
 
-    stage('1.- Code Promotion') {
+    // stage('1.- Code Promotion') {
 
         // when {
         //     branch 'main'
@@ -70,7 +70,7 @@ spec:
         //         sh "git push git@github.com:lhamaoka/casa-backend.git"
         //     }
         // }
-    }
+    // }
 
     // stage("2.- Compile"){
     //     steps{
