@@ -66,7 +66,7 @@ spec:
                 sh "git config --global user.name \"lhamaoka\""
                 sh "git commit -m \"pom.xml update \""
 
-                withCredentials([usernamePassword(credentialsId: 'github_credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'github_user_pass', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/casa-backend.git')
                 }               
             }
