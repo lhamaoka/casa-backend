@@ -38,8 +38,6 @@ spec:
     NEXUS_URL = "192.168.49.1:8081"
     NEXUS_REPOSITORY = "bootcamp"
     NEXUS_CREDENTIAL_ID = "nexus"
-    GIT_PASSWORD = "lhamaoka1305"
-    GIT_USERNAME = "lhamaoka"
   }
 
   stages {
@@ -52,6 +50,10 @@ spec:
     }
 
     stage('1.- Code Promotion') {
+
+        when {
+            branch 'main'
+        }
         steps {
             script {
                 // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
@@ -65,10 +67,8 @@ spec:
                 sh "git config --global user.email \"lhamaoka@devcenter.es\""
                 sh "git config --global user.name \"lhamaoka\""
                 sh "git commit -m \"pom.xml update \""
-
-                withCredentials([usernamePassword(credentialsId: 'github_user_pass', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/casa-backend.git')
-                }               
+                
+                sh "git push git@github.com:lhamaoka/casa-backend.git"
             }
         }
     }
