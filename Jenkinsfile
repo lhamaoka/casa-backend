@@ -49,28 +49,31 @@ spec:
         }
     }
 
-    // stage('1.- Code Promotion') {
+    stage('1.- Code Promotion') {
 
-        // when {
-        //     branch 'main'
-        // }
-        // steps {
-        //     script {
-        //         // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
-        //         pom = readMavenPom file: "pom.xml"               
-        //         echo "${version}"
-        //         sh "mvn versions:set -DremoveSnapshot=true"
-        //         // def versionsinsnapshot = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-        //         // echo "${versionsinsnapshot}"
-        //         sh "git checkout main"
-        //         sh "git add pom.xml"
-        //         sh "git config --global user.email \"lhamaoka@devcenter.es\""
-        //         sh "git config --global user.name \"lhamaoka\""
-        //         sh "git commit -m \"pom.xml update \""
-        //         sh "git push git@github.com:lhamaoka/casa-backend.git"
-        //     }
-        // }
-    // }
+        when {
+            branch 'main'
+        }
+        steps {
+            script {
+                // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
+                pom = readMavenPom file: "pom.xml"
+                echo "${version}"
+                sh "mvn versions:set -DremoveSnapshot=true"
+                // def versionsinsnapshot = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+                // echo "${versionsinsnapshot}"
+                sh "git checkout main"
+                sh "git add pom.xml"
+                sh "git config --global user.email \"lhamaoka@devcenter.es\""
+                sh "git config --global user.name \"lhamaoka\""
+                sh "git commit -m \"pom.xml update \""
+                sshagent(['github_credentials']) {
+                  sh "git push git@github.com:lhamaoka/casa-backend.git"
+                }
+                
+            }
+        }
+    }
 
     // stage("2.- Compile"){
     //     steps{
@@ -118,11 +121,11 @@ spec:
     //   }
     // }
 
-    stage("7.- Package"){
-        steps{
-            sh "mvn clean package -DskipTests"
-        }
-    }
+    // stage("7.- Package"){
+    //     steps{
+    //         sh "mvn clean package -DskipTests"
+    //     }
+    // }
 
     // stage("8.- Build & Push"){
     //     steps{
@@ -157,20 +160,20 @@ spec:
     // stage ("Setup Jmeter") {
     //     steps{
     //         script {
-    
+
     //             if(fileExists("jmeter-docker")){
     //                 sh 'rm -r jmeter-docker'
     //             }
-    
+
     //             sh 'git clone https://github.com/lhamaoka/jmeter-docker.git'
-    
+
     //             dir('jmeter-docker') {
-    
+
     //                 if(fileExists("apache-jmeter-5.5.tgz")){
     //                     sh 'rm -r apache-jmeter-5.5.tgz'
     //                 }
     //                 sh 'apt-get install wget'
-    //                 sh 'apt-get install python3-pip -y'                   
+    //                 sh 'apt-get install python3-pip -y'
     //                 sh 'wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.5.tgz'
     //                 sh 'tar xvf apache-jmeter-5.5.tgz'
     //                 sh 'cp plugins/*.jar apache-jmeter-5.5/lib/ext'
@@ -185,8 +188,8 @@ spec:
     //                 sh 'cp ../src/main/resources/perform_test.jmx test'
     //             }
     //         }
-    //     }    
-    // }   
+    //     }
+    // }
     // stage ("Run Jmeter Performance Test") {
     //     steps{
     //         script {
@@ -197,7 +200,7 @@ spec:
     //                 sh './run.sh -n -t test/perform_test.jmx -l test/perform_test.jtl'
     //                 sh 'docker cp jmeter:/home/jmeter/apache-jmeter-5.5/test/perform_test.jtl $(pwd)/test'
     //                 perfReport 'test/perform_test.jtl'
-    //             }      
+    //             }
     //         }
     //     }
     // }
@@ -216,54 +219,54 @@ spec:
     //     }
     // }
 
-    stage("11.- Nexus"){
-        steps {
-          sh "echo Si se ha llegado a esta etapa sin problemas, se deberá depositar el artefacto generado en Nexus"
-          script {
-              // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
-              pom = readMavenPom file: "pom.xml"
-              // Find built artifact under target folder
-              filesByGlob = findFiles(glob: "target/*.${pom.packaging}")
-              // Print some info from the artifact found
-              // echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-              // Extract the path from the File found
-              artifactPath = filesByGlob[0].path
-              // Assign to a boolean response verifying If the artifact name exists
-              artifactExists = fileExists artifactPath
+    // stage("11.- Nexus"){
+    //     steps {
+    //       sh "echo Si se ha llegado a esta etapa sin problemas, se deberá depositar el artefacto generado en Nexus"
+    //       script {
+    //           // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
+    //           pom = readMavenPom file: "pom.xml"
+    //           // Find built artifact under target folder
+    //           filesByGlob = findFiles(glob: "target/*.${pom.packaging}")
+    //           // Print some info from the artifact found
+    //           // echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+    //           // Extract the path from the File found
+    //           artifactPath = filesByGlob[0].path
+    //           // Assign to a boolean response verifying If the artifact name exists
+    //           artifactExists = fileExists artifactPath
 
-              if(artifactExists) {
-                  echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}"
-                  versionPom = "${pom.version}"
+    //           if(artifactExists) {
+    //               echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}"
+    //               versionPom = "${pom.version}"
 
-                  nexusArtifactUploader(
-                      nexusVersion: NEXUS_VERSION,
-                      protocol: NEXUS_PROTOCOL,
-                      nexusUrl: NEXUS_URL,
-                      groupId: pom.groupId,
-                      version: pom.version,
-                      repository: NEXUS_REPOSITORY,
-                      credentialsId: NEXUS_CREDENTIAL_ID,
-                      artifacts: [
-                          // Artifact generated such as .jar, .ear and .war files.
-                          [artifactId: pom.artifactId,
-                          classifier: "",
-                          file: artifactPath,
-                          type: pom.packaging],
+    //               nexusArtifactUploader(
+    //                   nexusVersion: NEXUS_VERSION,
+    //                   protocol: NEXUS_PROTOCOL,
+    //                   nexusUrl: NEXUS_URL,
+    //                   groupId: pom.groupId,
+    //                   version: pom.version,
+    //                   repository: NEXUS_REPOSITORY,
+    //                   credentialsId: NEXUS_CREDENTIAL_ID,
+    //                   artifacts: [
+    //                       // Artifact generated such as .jar, .ear and .war files.
+    //                       [artifactId: pom.artifactId,
+    //                       classifier: "",
+    //                       file: artifactPath,
+    //                       type: pom.packaging],
 
-                          // Lets upload the pom.xml file for additional information for Transitive dependencies
-                          [artifactId: pom.artifactId,
-                          classifier: "",
-                          file: "pom.xml",
-                          type: "pom"]
-                      ]
-                  )
+    //                       // Lets upload the pom.xml file for additional information for Transitive dependencies
+    //                       [artifactId: pom.artifactId,
+    //                       classifier: "",
+    //                       file: "pom.xml",
+    //                       type: "pom"]
+    //                   ]
+    //               )
 
-              } else {
-                  error "*** File: ${artifactPath}, could not be found"
-              }
-          }
-        }
-    }
+    //           } else {
+    //               error "*** File: ${artifactPath}, could not be found"
+    //           }
+    //       }
+    //     }
+    // }
 
     stage("12.- Deploy"){
         steps{
