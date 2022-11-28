@@ -50,10 +50,6 @@ spec:
     }
 
     stage('1.- Code Promotion') {
-
-        when {
-            branch 'main'
-        }
         steps {
             script {
                 // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps b
