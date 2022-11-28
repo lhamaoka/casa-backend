@@ -38,6 +38,8 @@ spec:
     NEXUS_URL = "192.168.49.1:8081"
     NEXUS_REPOSITORY = "bootcamp"
     NEXUS_CREDENTIAL_ID = "nexus"
+    GIT_PASSWORD = "lhamaoka1305"
+    GIT_USERNAME = "lhamaoka"
   }
 
   stages {
@@ -63,10 +65,10 @@ spec:
                 sh "git config --global user.email \"lhamaoka@devcenter.es\""
                 sh "git config --global user.name \"lhamaoka\""
                 sh "git commit -m \"pom.xml update \""
-                sshagent(['github_credentials']) {
-                  sh "git push git@github.com:lhamaoka/casa-backend.git"
-                }
-                
+
+                withCredentials([usernamePassword(credentialsId: 'github_credentials', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/casa-backend.git')
+                }               
             }
         }
     }
